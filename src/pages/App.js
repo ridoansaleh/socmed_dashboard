@@ -9,10 +9,10 @@ setConfig({ logLevel: 'debug' });
 const App = () => (
   <BrowserRouter>
     <div>
-        <Switch>
-            <Route path="/" component={Home} exact />
-            <Route component={NotFound}/>
-        </Switch>
+      <Switch>
+        <Route path="/" component={Home} exact />
+        <Route component={NotFound} />
+      </Switch>
     </div>
   </BrowserRouter>
 );
