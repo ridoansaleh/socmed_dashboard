@@ -1,35 +1,35 @@
-const FETCH_USERS_START = 'FETCH_USERS_START'
-const FETCH_USERS_SUCCESS = 'FETCH_USERS_SUCCESS'
-const FETCH_USERS_FAILED = 'FETCH_USERS_FAILED'
+const FETCH_POSTS_START = 'FETCH_POSTS_START'
+const FETCH_POSTS_SUCCESS = 'FETCH_POSTS_SUCCESS'
+const FETCH_POSTS_FAILED = 'FETCH_POSTS_FAILED'
 
 const fetchStart = () => {
   return {
-    type: FETCH_USERS_START
+    type: FETCH_POSTS_START
   }
 }
 
-const fetchSuccess = (users) => {
+const fetchSuccess = (posts) => {
   return {
-    type: FETCH_USERS_SUCCESS,
-    payload: users
+    type: FETCH_POSTS_SUCCESS,
+    payload: posts
   }
 }
 
 const fetchFailed = (error) => {
   return {
-    type: FETCH_USERS_FAILED,
+    type: FETCH_POSTS_FAILED,
     error: error
   }
 }
 
-const fetchUsers = () => dispatch => {
+const fetchPosts = (userId) => dispatch => {
   dispatch(fetchStart())
-  fetch('https://jsonplaceholder.typicode.com/users')
+  fetch('https://jsonplaceholder.typicode.com/posts?userId=' + userId)
     .then(response => {
       if (response.ok) {
         return response.json();
       } else {
-        throw new Error('Error while fetching users');
+        throw new Error('Error while fetching posts of an user with id= ', userId);
       }
     })
     .then(json => {
@@ -37,7 +37,7 @@ const fetchUsers = () => dispatch => {
     })
     .catch(error => {
       dispatch(fetchFailed(error))
-      console.log('Error while fetching users at : ', error)
+      console.error('Error while fetching posts of an user with id= ' + userId + '. Error at ' + error)
     })
 }
 
@@ -50,14 +50,14 @@ let initialState = {
   error: null
 }
 
-const usersReducer = (state = initialState, action) => {
+const postsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case FETCH_USERS_START:
+    case FETCH_POSTS_START:
       return {
         ...state,
         isFetching: true
       };
-    case FETCH_USERS_SUCCESS:
+    case FETCH_POSTS_SUCCESS:
       return {
         ...state,
         isFetching: false,
@@ -65,13 +65,12 @@ const usersReducer = (state = initialState, action) => {
         isFailed: false,
         data: action.payload
       };
-    case FETCH_USERS_FAILED:
+    case FETCH_POSTS_FAILED:
       return {
         ...state,
         isFailed: true,
         isFetching: false,
-        isSucceed: false,
-        error: action.payload
+        isSucceed: false
       };
     default:
       return state;
@@ -79,6 +78,6 @@ const usersReducer = (state = initialState, action) => {
 };
 
 export {
-  usersReducer,
-  fetchUsers
+  postsReducer,
+  fetchPosts
 }
