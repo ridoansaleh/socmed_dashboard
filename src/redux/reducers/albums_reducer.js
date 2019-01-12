@@ -1,35 +1,35 @@
-const FETCH_USERS_START = 'FETCH_USERS_START'
-const FETCH_USERS_SUCCESS = 'FETCH_USERS_SUCCESS'
-const FETCH_USERS_FAILED = 'FETCH_USERS_FAILED'
+const FETCH_ALBUMS_START = 'FETCH_ALBUMS_START'
+const FETCH_ALBUMS_SUCCESS = 'FETCH_ALBUMS_SUCCESS'
+const FETCH_ALBUMS_FAILED = 'FETCH_ALBUMS_FAILED'
 
 const fetchStart = () => {
   return {
-    type: FETCH_USERS_START
+    type: FETCH_ALBUMS_START
   }
 }
 
-const fetchSuccess = (users) => {
+const fetchSuccess = (albums) => {
   return {
-    type: FETCH_USERS_SUCCESS,
-    payload: users
+    type: FETCH_ALBUMS_SUCCESS,
+    payload: albums
   }
 }
 
 const fetchFailed = (error) => {
   return {
-    type: FETCH_USERS_FAILED,
+    type: FETCH_ALBUMS_FAILED,
     error: error
   }
 }
 
-const fetchUsers = () => dispatch => {
+const fetchAlbums = (userId) => dispatch => {
   dispatch(fetchStart())
-  fetch('https://jsonplaceholder.typicode.com/users')
+  fetch('https://jsonplaceholder.typicode.com/albums?userId=' + userId)
     .then(response => {
       if (response.ok) {
         return response.json();
       } else {
-        throw new Error('Error while fetching users');
+        throw new Error('Error while fetching album of an user with id= ', userId);
       }
     })
     .then(json => {
@@ -37,7 +37,7 @@ const fetchUsers = () => dispatch => {
     })
     .catch(error => {
       dispatch(fetchFailed(error))
-      console.log('Error while fetching users at : ', error)
+      console.error('Error while fetching album of an user with id= ' + userId + '. Error at ' + error)
     })
 }
 
@@ -50,14 +50,14 @@ let initialState = {
   error: null
 }
 
-const usersReducer = (state = initialState, action) => {
+const albumsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case FETCH_USERS_START:
+    case FETCH_ALBUMS_START:
       return {
         ...state,
         isFetching: true
       };
-    case FETCH_USERS_SUCCESS:
+    case FETCH_ALBUMS_SUCCESS:
       return {
         ...state,
         isFetching: false,
@@ -65,13 +65,12 @@ const usersReducer = (state = initialState, action) => {
         isFailed: false,
         data: action.payload
       };
-    case FETCH_USERS_FAILED:
+    case FETCH_ALBUMS_FAILED:
       return {
         ...state,
         isFailed: true,
         isFetching: false,
-        isSucceed: false,
-        error: action.payload
+        isSucceed: false
       };
     default:
       return state;
@@ -79,6 +78,6 @@ const usersReducer = (state = initialState, action) => {
 };
 
 export {
-  usersReducer,
-  fetchUsers
+  albumsReducer,
+  fetchAlbums
 }

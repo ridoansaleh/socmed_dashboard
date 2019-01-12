@@ -23,6 +23,7 @@ const config = {
     headers: {
       'Access-Control-Allow-Origin': '*'
     },
+    historyApiFallback: true,
     port: 3001,
     hot: true,
     open: true

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import AppBar from '@material-ui/core/AppBar';
@@ -73,9 +74,6 @@ class HomeView extends Component {
     const { classes } = this.props;
     const { isDataFetched, users } = this.state
 
-    if (!isDataFetched) {
-      return null
-    }
     return (
       <div className={classes.root}>
         <AppBar position="sticky">
@@ -91,22 +89,33 @@ class HomeView extends Component {
           justify="center"
           alignItems="center"
         >
-          <List dense className={classes.content}>
-            {users.map(value => (
-              <ListItem key={value.id} button>
-                <ListItemAvatar>
-                  <Avatar
-                    alt={`Image of ${value.name}`}
-                    src={DefaultProfile}
-                  />
-                </ListItemAvatar>
-                <ListItemText primary={value.name} />
-                <ListItemSecondaryAction>
-                  <ListItemText primary={`${value.address.street}, ${value.address.city}`} />
-                </ListItemSecondaryAction>
-              </ListItem>
-            ))}
-          </List>
+          {
+            !isDataFetched && <h2>Loading ...</h2>
+          }
+          {
+            isDataFetched &&
+            <List dense className={classes.content}>
+              {users && users.map(value => (
+                <Link to={`user/${value.id}`} key={value.id}>
+                  <ListItem button>
+                    <ListItemAvatar>
+                      <Avatar
+                        alt={`Image of ${value.name}`}
+                        src={DefaultProfile}
+                      />
+                    </ListItemAvatar>
+                    <ListItemText primary={value.name} />
+                    <ListItemSecondaryAction>
+                      <ListItemText primary={`${value.address.street}, ${value.address.city}`} />
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                </Link>
+              ))}
+            </List>
+          }
+          {
+            (isDataFetched && !users) && <h2>There is no user yet</h2>
+          }
         </Grid>
       </div>
     )
