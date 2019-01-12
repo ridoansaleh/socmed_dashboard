@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
@@ -82,7 +83,7 @@ class AlbumsView extends Component {
                 />
                 <CardContent>
                   <Typography component="p">
-                    {album.title}
+                    <Link to={`/album/${album.id}`}>{album.title}</Link>
                   </Typography>
                 </CardContent>
               </Card>)
