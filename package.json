@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "start:dev": "NODE_ENV=development webpack-dev-server --config bundler/webpack.dev.js",
+    "start:dev": "webpack-dev-server --config bundler/webpack.dev.js",
     "build:prod": "webpack --config bundler/webpack.prod.js",
     "start": "node build/index.js"
   },
